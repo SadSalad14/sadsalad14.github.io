@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sadsalad14 — Portfolio</title>
+
+  <!-- Fontes do Google: uma para títulos (Syne) e uma para o corpo (JetBrains Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       CORES DO TEMA
+       Quando o usuário clica em "light mode", o JavaScript troca
+       o atributo data-theme no <html> e o CSS usa as cores certas.
+    ============================================================ */
+    :root[data-theme="dark"] {
+      --bg:      #0d1117;   /* fundo principal */
+      --bg2:     #161b22;   /* fundo dos cards */
+      --bg3:     #21262d;   /* fundo de tags */
+      --border:  #30363d;   /* cor das bordas */
+      --text:    #e6edf3;   /* texto principal */
+      --muted:   #8b949e;   /* texto secundário */
+      --accent:  #39d353;   /* verde — destaques */
+      --accent2: #58a6ff;   /* azul — links */
+    }
+    :root[data-theme="light"] {
+      --bg:      #ffffff;
+      --bg2:     #f6f8fa;
+      --bg3:     #eaeef2;
+      --border:  #d0d7de;
+      --text:    #1f2328;
+      --muted:   #57606a;
+      --accent:  #1a7f37;
+      --accent2: #0969da;
+    }
+
+    /* ============================================================
+       RESET E BASE
+       Remove margens padrão do navegador e define fonte/cor base.
+    ============================================================ */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      line-height: 1.7;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    a { color: var(--accent2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ============================================================
+       CONTAINER — Centraliza e limita a largura do conteúdo.
+    ============================================================ */
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ============================================================
+       NAVBAR
+    ============================================================ */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 0;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 13px; font-weight: 700;
+      color: var(--accent); letter-spacing: 0.05em;
+    }
+    .nav-logo span { color: var(--muted); font-weight: 300; }
+
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a {
+      color: var(--muted); font-size: 12px;
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* Botão de trocar tema */
+    .btn-tema {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 4px 12px;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px; color: var(--muted);
+      transition: all 0.2s;
+    }
+    .btn-tema:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ============================================================
+       HERO — Apresentação principal
+    ============================================================ */
+    .hero {
+      padding: 72px 0 56px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-prefix {
+      font-size: 12px; color: var(--accent);
+      letter-spacing: 0.1em; margin-bottom: 12px;
+    }
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(32px, 6vw, 54px);
+      font-weight: 800; line-height: 1.1; margin-bottom: 8px;
+    }
+    /* Cursor piscando depois do nome */
+    .cursor {
+      display: inline-block; width: 3px; height: 1em;
+      background: var(--accent); margin-left: 4px;
+      animation: piscar 1s step-end infinite;
+      vertical-align: text-bottom;
+    }
+    @keyframes piscar { 50% { opacity: 0; } }
+
+    .hero-cargo { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+    .hero-cargo::before { content: '// '; color: var(--accent); }
+
+    .hero-bio {
+      max-width: 540px; color: var(--muted); font-size: 13px;
+      border-left: 2px solid var(--accent);
+      padding-left: 14px; margin-bottom: 28px;
+    }
+
+    /* Badges do hero */
+    .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge {
+      font-size: 11px; padding: 4px 10px;
+      background: var(--bg3); color: var(--muted);
+      border: 1px solid var(--border); border-radius: 4px;
+    }
+    .badge-green {
+      color: #3fb950; background: #0d2818; border-color: #1a4226;
+    }
+    [data-theme="light"] .badge-green {
+      color: #16a34a; background: #dcfce7; border-color: #bbf7d0;
+    }
+
+    /* ============================================================
+       SEÇÕES — Estilos compartilhados
+    ============================================================ */
+    section {
+      padding: 52px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .sec-label {
+      font-size: 11px; color: var(--accent);
+      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px;
+    }
+    .sec-label::before { content: '## '; color: var(--muted); }
+    h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px; font-weight: 600; margin-bottom: 32px;
+    }
+
+    /* ============================================================
+       SKILLS
+       Sem barras de progresso. Etiquetas honestas de nível.
+       Troque o class da etiqueta conforme seu nível real:
+         nivel-estudando → azul  (aprendendo agora)
+         nivel-usando    → verde (uso em aula/projetos)
+         nivel-familiar  → amarelo (já vi bastante)
+    ============================================================ */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 14px;
+    }
+    .skill-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 16px; transition: border-color 0.2s;
+    }
+    .skill-card:hover { border-color: var(--accent2); }
+
+    .skill-topo {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 10px;
+    }
+    .skill-nome { font-size: 13px; font-weight: 500; }
+
+    .nivel {
+      font-size: 10px; padding: 2px 8px;
+      border-radius: 10px; border: 1px solid;
+    }
+    .nivel-estudando { color: var(--accent2); border-color: var(--accent2); }
+    .nivel-usando    { color: var(--accent);  border-color: var(--accent);  }
+    .nivel-familiar  { color: #d29922;        border-color: #d29922;        }
+
+    .skill-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag {
+      font-size: 10px; padding: 2px 7px;
+      background: var(--bg3); color: var(--muted); border-radius: 3px;
+    }
+
+    /* ============================================================
+       TIMELINE
+    ============================================================ */
+    .timeline { position: relative; padding-left: 28px; }
+    .timeline::before {
+      content: ''; position: absolute;
+      left: 0; top: 8px; bottom: 8px;
+      width: 1px; background: var(--border);
+    }
+    .tl-item { position: relative; margin-bottom: 32px; }
+    .tl-item:last-child { margin-bottom: 0; }
+
+    .tl-dot {
+      position: absolute; left: -33px; top: 5px;
+      width: 10px; height: 10px; border-radius: 50%;
+      border: 2px solid var(--accent); background: var(--bg);
+      transition: background 0.2s;
+    }
+    .tl-item:hover .tl-dot { background: var(--accent); }
+    .tl-dot.futuro { border-color: var(--muted); border-style: dashed; }
+
+    .tl-data  { font-size: 11px; color: var(--muted); margin-bottom: 3px; }
+    .tl-titulo { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+    .tl-sub   { font-size: 12px; color: var(--muted); }
+
+    .tl-status {
+      display: inline-block; margin-top: 6px;
+      font-size: 10px; padding: 2px 8px;
+      border-radius: 10px; border: 1px solid;
+    }
+    .tl-status.feito   { color: var(--accent);  border-color: var(--accent); }
+    .tl-status.andando { color: var(--accent2); border-color: var(--accent2); }
+    .tl-status.plano   { color: var(--muted);   border-color: var(--muted); border-style: dashed; }
+
+    /* ============================================================
+       PROJETOS
+    ============================================================ */
+    .proj-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 14px;
+    }
+    .proj-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 18px;
+      display: flex; flex-direction: column;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .proj-card:hover { border-color: var(--accent2); transform: translateY(-2px); }
+
+    .proj-topo {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; margin-bottom: 10px;
+    }
+    .proj-emoji { font-size: 20px; }
+    .proj-link {
+      font-size: 10px; color: var(--muted); padding: 3px 8px;
+      border: 1px solid var(--border); border-radius: 4px;
+      text-decoration: none; transition: all 0.2s;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .proj-link:hover { color: var(--accent2); border-color: var(--accent2); text-decoration: none; }
+
+    .proj-nome { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+    .proj-desc { font-size: 12px; color: var(--muted); line-height: 1.6; flex: 1; margin-bottom: 14px; }
+    .proj-techs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .proj-tech {
+      font-size: 10px; padding: 2px 7px;
+      background: var(--bg3); color: var(--muted); border-radius: 3px;
+    }
+
+    /* ============================================================
+       CONTATO
+    ============================================================ */
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 12px;
+    }
+    .link-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 14px 18px;
+      display: flex; align-items: center; gap: 14px;
+      text-decoration: none; color: var(--text); transition: border-color 0.2s;
+    }
+    .link-card:hover { border-color: var(--accent2); text-decoration: none; }
+    .link-icone {
+      width: 34px; height: 34px; border-radius: 8px;
+      background: var(--bg3); display: flex;
+      align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; flex-shrink: 0;
+    }
+    .link-label { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+    .link-val   { font-size: 13px; font-weight: 500; }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      padding: 28px 0; text-align: center;
+      font-size: 11px; color: var(--muted);
+    }
+    footer span { color: var(--accent); }
+
+    /* ============================================================
+       RESPONSIVO — telas menores que 600px
+    ============================================================ */
+    @media (max-width: 600px) {
+      h1 { font-size: 30px; }
+      .nav-links a { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════
+       NAVBAR
+  ══════════════════════════ -->
+  <nav>
+    <div class="container nav-inner">
+      <div class="nav-logo">~/sadsalad14<span>/portfolio</span></div>
+      <div class="nav-links">
+        <a href="#skills">skills</a>
+        <a href="#formacao">formação</a>
+        <a href="#projetos">projetos</a>
+        <a href="#contato">contato</a>
+        <button class="btn-tema" onclick="toggleTema()">☀ light mode</button>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ══════════════════════════
+       HERO
+  ══════════════════════════ -->
+  <div class="container">
+    <div class="hero">
+      <div class="hero-prefix">olá, mundo</div>
+      <h1>Maciel Henrique<span class="cursor"></span></h1>
+      <div class="hero-cargo">Estudante de ADS · em construção</div>
+      <p class="hero-bio">
+        Aprendendo desenvolvimento na prática — um projeto de cada vez.
+        Aqui você encontra minhas experiências com código, desde exercícios
+        de aula até projetos pessoais inacabados, simples ou não.
+      </p>
+      <div class="badges">
+        <span class="badge badge-green">● aberto a oportunidades</span>
+        <span class="badge">📍 São Lourenço da Mata, BR</span>
+        <span class="badge">🎓 Graduando</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════
+       SKILLS
+       Etiquetas de nível disponíveis:
+         nivel-estudando → azul
+         nivel-usando    → verde
+         nivel-familiar  → amarelo
+       Edite as <span class="tag"> para mostrar
+       o que você já estudou em cada linguagem.
+  ══════════════════════════ -->
+  <section id="skills">
+    <div class="container">
+      <div class="sec-label">linguagens</div>
+      <h2>O que estou aprendendo</h2>
+      <div class="skills-grid">
+
+        <div class="skill-card">
+          <div class="skill-topo">
+            <span class="skill-nome">Python</span>
+            <span class="nivel nivel-estudando">estudando agora</span>
+          </div>
+          <div class="skill-tags">
+            <span class="tag">variáveis</span>
+            <span class="tag">funções</span>
+            <span class="tag">listas</span>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-topo">
+            <span class="skill-nome">Java</span>
+            <span class="nivel nivel-usando">usando em projetos</span>
+          </div>
+          <div class="skill-tags">
+            <span class="tag">POO</span>
+            <span class="tag">classes</span>
+            <span class="tag">herança</span>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-topo">
+            <span class="skill-nome">HTML &amp; CSS</span>
+            <span class="nivel nivel-familiar">me sinto confortável</span>
+          </div>
+          <div class="skill-tags">
+            <span class="tag">estrutura</span>
+            <span class="tag">flexbox</span>
+            <span class="tag">responsivo</span>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-topo">
+            <span class="skill-nome">JavaScript</span>
+            <span class="nivel nivel-usando">usando em projetos</span>
+          </div>
+          <div class="skill-tags">
+            <span class="tag">DOM</span>
+            <span class="tag">eventos</span>
+          </div>
+        </div>
+
+        <div class="skill-card">
+          <div class="skill-topo">
+            <span class="skill-nome">MySQL</span>
+            <span class="nivel nivel-familiar">me sinto confortável</span>
+          </div>
+          <div class="skill-tags">
+            <span class="tag">SELECT</span>
+            <span class="tag">INSERT</span>
+            <span class="tag">JOIN</span>
+            <span class="tag">DROP</span>
+          </div>
+        </div>
+
+        <div class="skill-card">
+            <div class="skill-topo">
+              <span class="skill-nome">React Native</span>
+              <span class="nivel nivel-estudando">estudando agora</span>
+            </div>
+            <div class="skill-tags">
+              <span class="tag">Dispositivos móveis</span>
+              <span class="tag">componentes</span>
+            </div>
+          </div>
+        <!--
+          PARA ADICIONAR NOVA LINGUAGEM, copie o bloco abaixo:
+
+          <div class="skill-card">
+            <div class="skill-topo">
+              <span class="skill-nome">NOME</span>
+              <span class="nivel nivel-estudando">estudando agora</span>
+            </div>
+            <div class="skill-tags">
+              <span class="tag">tópico 1</span>
+            </div>
+          </div>
+        -->
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════
+       TIMELINE
+       Status: feito / andando / plano
+       Itens futuros: adicione class="futuro" no .tl-dot
+  ══════════════════════════ -->
+  <section id="formacao">
+    <div class="container">
+      <div class="sec-label">trajetória</div>
+      <h2>Formações &amp; cursos</h2>
+      <div class="timeline">
+
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-data">2024</div>
+          <div class="tl-titulo">Ensino Médio</div>
+          <div class="tl-sub">EREM Conde Pereira Carneiro</div>
+          <span class="tl-status feito">concluído</span>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-data">2025</div>
+          <div class="tl-titulo">ADS</div>
+          <div class="tl-sub">UNINASSAU</div>
+          <span class="tl-status feito">em andamento</span>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot futuro"></div>
+          <div class="tl-data">em planejamento</div>
+          <div class="tl-titulo">Certificado Github</div>
+          <div class="tl-sub"><a href="skills.github.com">skills.github.com</a></div>
+          <span class="tl-status plano">planejado</span>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-data">em planejamento</div>
+          <div class="tl-titulo">Certificado JAVA</div>
+          <div class="tl-sub">???</div>
+          <span class="tl-status andando">planejado</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════
+       PROJETOS
+       Dica: 2 a 4 projetos já é ótimo!
+  ══════════════════════════ -->
+  <section id="projetos">
+    <div class="container">
+      <div class="sec-label">trabalhos</div>
+      <h2>Projetos em destaque</h2>
+      <div class="proj-grid">
+
+        <div class="proj-card">
+          <div class="proj-topo">
+            <span class="proj-emoji">🌐</span>
+            <a class="proj-link" href="https://github.com/sadsalad14/idp-news" target="_blank">repo</a>
+            <a class="proj-link" href="https://sadsalad14.github.io/idp-news" target="_blank">site</a>
+          </div>
+          <div class="proj-nome">idp.news</div>
+          <div class="proj-desc">Feito para proporcionar aos usuários o compartilhamento de notícias indepentes</div>
+          <div class="proj-techs">
+            <span class="proj-tech">HTML</span>
+            <span class="proj-tech">CSS</span>
+            <span class="proj-tech">JavaScript</span>
+          </div>
+        </div>
+
+        <!--
+        <div class="proj-card">
+          <div class="proj-topo">
+            <span class="proj-emoji">☕</span>
+            <a class="proj-link" href="https://github.com/SEU_USUARIO/REPO" target="_blank">repo</a>
+          </div>
+          <div class="proj-nome">Nome do Projeto 2</div>
+          <div class="proj-desc">Descreva em 1-2 frases o que o projeto faz e por que você o fez.</div>
+          <div class="proj-techs">
+            <span class="proj-tech">Java</span>
+            <span class="proj-tech">MySQL</span>
+          </div>
+        </div> 
+        -->
+
+        <!--
+          PARA ADICIONAR PROJETO, copie um card acima e cole aqui.
+        -->
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════
+       CONTATO
+  ══════════════════════════ -->
+  <section id="contato">
+    <div class="container">
+      <div class="sec-label">contato</div>
+      <h2>Onde me encontrar</h2>
+      <div class="links-grid">
+
+        <a class="link-card" href="www.linkedin.com/in/maciel-henrique014" target="_blank">
+          <div class="link-icone">in</div>
+          <div>
+            <div class="link-label">LinkedIn</div>
+            <div class="link-val">Maciel Henrique</div>
+          </div>
+        </a>
+
+        <a class="link-card" href="https://github.com/sadsalad14" target="_blank">
+          <div class="link-icone">GH</div>
+          <div>
+            <div class="link-label">GitHub</div>
+            <div class="link-val">sadsalad14</div>
+          </div>
+        </a>
+
+        <a class="link-card" href="mailto:macielenrique14@gmail.com">
+          <div class="link-icone">@</div>
+          <div>
+            <div class="link-label">E-mail</div>
+            
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════
+       FOOTER
+  ══════════════════════════ -->
+  <footer>
+    feito por <span>sadsalad14</span> ·
+    <a href="https://github.com/sadsalad14">ver no github</a>
+  </footer>
+
+
+  <!-- ══════════════════════════
+       JAVASCRIPT — só 1 função!
+  ══════════════════════════ -->
+  <script>
+    function toggleTema() {
+      // Pega o elemento <html> da página
+      const html = document.documentElement;
+
+      // Lê o tema atual
+      const temaAtual = html.getAttribute('data-theme');
+
+      // Troca para o oposto e atualiza o texto do botão
+      if (temaAtual === 'dark') {
+        html.setAttribute('data-theme', 'light');
+        document.querySelector('.btn-tema').textContent = '☾ dark mode';
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        document.querySelector('.btn-tema').textContent = '☀ light mode';
+      }
+    }
+  </script>
+
+</body>
+</html>
